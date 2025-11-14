@@ -31,7 +31,7 @@ def index_select_ND(source: torch.Tensor, index: torch.Tensor) -> torch.Tensor:
     return target
 
 
-class HGNNEncoder(nn.Module):
+class UMSGFEncoder(nn.Module):
     """A message passing neural network for encoding a molecule."""
 
     def __init__(self, atom_fdim, bond_fdim, hidden_size, depth, device):
@@ -169,7 +169,7 @@ class WeightFusion(nn.Module):
         return sum([inputs[i] * weight for i, weight in enumerate(self.weight[0][0])]) + self.bias
 
 
-class FHGNN(nn.Module):
+class UMSGFNet(nn.Module):
     def __init__(self,
                  data_name,
                  atom_fdim: int = None,
@@ -179,7 +179,7 @@ class FHGNN(nn.Module):
                  depth=5,
                  device='cpu',
                  out_dim=2, ):
-        super(FHGNN, self).__init__()
+        super(UMSGFNet, self).__init__()
         self.data_name = data_name
         self.device = device
         self.atom_fdim = atom_fdim
@@ -223,3 +223,4 @@ class FHGNN(nn.Module):
         ligand_x = self.feature_fusion(torch.stack([ligand_x, fp_x.squeeze(0)], dim=0))
         x = self.mlp(ligand_x)
         return x
+
