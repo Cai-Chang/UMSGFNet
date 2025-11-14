@@ -10,7 +10,7 @@ import torch.optim as optim
 from torch_geometric.data import DataLoader
 from sklearn.metrics import roc_auc_score, mean_squared_error, mean_absolute_error
 
-from fhgnn import FHGNN
+from fhgnn import UMSGFNet
 from splitters import scaffold_split
 from loader import HiMolGraph, MoleculeDataset
 
@@ -119,7 +119,7 @@ def eval_reg(args, model, device, loader):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='PyTorch implementation of FH-GNN')
+    parser = argparse.ArgumentParser(description='PyTorch implementation of umsgfnet')
     parser.add_argument('--device', type=int, default=0,
                         help='which gpu to use if any')
     parser.add_argument('--batch_size', type=int, default=64,
@@ -184,7 +184,7 @@ def main():
     val_loader = DataLoader(valid_dataset, batch_size=args.batch_size, shuffle=False, num_workers = args.num_workers)
     test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers = args.num_workers)
 
-    model = FHGNN(data_name=args.dataset, atom_fdim=89, bond_fdim=98,fp_fdim=6338, 
+    model = UMSGFNet(data_name=args.dataset, atom_fdim=89, bond_fdim=98,fp_fdim=6338, 
                   hidden_size=512, depth=args.depth, device=device, out_dim=num_tasks,)
     model.to(device)
 
@@ -192,9 +192,9 @@ def main():
     #different learning rate for different part of GNN
     model_param_group = []
     model_param_group.append({"params": model.parameters(), "lr":args.lr})
-    # 在优化器中添加 weight_decay 参数（L2 正则化）# 在优化器中添加 weight_decay 参数（L2 正则化）
+    
     optimizer = optim.Adam(model_param_group, weight_decay=1e-5)
-    # 在优化器中添加 weight_decay 参数（L2 正则化）
+    
 
     print(optimizer)
 
