@@ -10,7 +10,7 @@ import torch.optim as optim
 from torch_geometric.data import DataLoader
 from sklearn.metrics import roc_auc_score, mean_squared_error, mean_absolute_error
 
-from fhgnn import UMSGFNet
+from UMSGFNet import UMSGFNet
 from splitters import scaffold_split
 from loader import HiMolGraph, MoleculeDataset
 
